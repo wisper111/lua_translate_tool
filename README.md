@@ -1,4 +1,4 @@
-#lua_translate_tool
+lua_translate_tool
 
 Description
 -----------
@@ -8,13 +8,13 @@ lua script translate tool
 Documentation
 -------------
 
-build after install third party library
+Build after install third party library
  
     go get github.com/mattn/go-sqlite3
     
 How to use:
 
-Extract Chinese character string
+Extract chinese character string
  
     ./trans getstring file or folder
 	
@@ -24,7 +24,7 @@ Use artificial translated documents(trans.txt), update to dictionary
 	
 Translate all file or folder
  
-    ./trans translate srcpath despath
+    ./trans translate srcPath desPath
 
 License
 -------------
