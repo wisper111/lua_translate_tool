@@ -5,6 +5,8 @@ import (
 	"os"
 	"strings"
 	"trans/functool"
+
+	//	"github.com/profile"
 )
 
 func useage() {
@@ -28,6 +30,7 @@ Remark: Only support UFT-8 encoding`)
 }
 
 func main() {
+	//	defer profile.Start(profile.MemProfile).Stop()
 	switch len(os.Args) {
 	case 3:
 		if strings.EqualFold(os.Args[1], "getstring") {
