@@ -3,6 +3,7 @@ package analysis
 import (
 	"bytes"
 	"errors"
+	"fmt"
 )
 
 type analysis struct {
@@ -171,8 +172,8 @@ func (a *analysis) Analysis(text *[]byte) error {
 			}
 		}
 	}
-	if nState != state_normal {
-		return errors.New("file syntax error")
+	if nState != state_normal && nState != state_note_line {
+		return errors.New(fmt.Sprintf("%s state:%d", "file syntax error", nState))
 	}
 	return nil
 }

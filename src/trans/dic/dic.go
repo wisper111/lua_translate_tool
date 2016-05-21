@@ -19,12 +19,19 @@ func New(dbname string) *dic {
 		log.Fatal(err)
 	}
 	sqlStmt := `
-	create table if not exists dic (cn text not null primary key, trans text);
+	create table if not exists dic (cn bold not null primary key, trans bold not null);
 	`
 	_, err = ins.db.Exec(sqlStmt)
 	if err != nil {
 		log.Fatal("%q: %s\n", err, sqlStmt)
 	}
+	//	sqlStmt = `
+	//	create index if not exists cn_index on dic(cn);
+	//	`
+	//	_, err = ins.db.Exec(sqlStmt)
+	//	if err != nil {
+	//		log.Fatal("%q: %s\n", err, sqlStmt)
+	//	}
 	return ins
 }
 
@@ -32,7 +39,7 @@ func (d *dic) Close() {
 	d.db.Close()
 }
 
-func (d *dic) InsertString(cn, trans string) error {
+func (d *dic) Insert(cn, trans []byte) error {
 	tx, err := d.db.Begin()
 	if err != nil {
 		return err
@@ -49,8 +56,8 @@ func (d *dic) InsertString(cn, trans string) error {
 	return tx.Commit()
 }
 
-func (d *dic) QueryString(text string) (string, error) {
-	var trans string
+func (d *dic) Query(text []byte) ([]byte, error) {
+	var trans []byte
 	stmt, err := d.db.Prepare("select trans from dic where cn = ?")
 	if err != nil {
 		return trans, err

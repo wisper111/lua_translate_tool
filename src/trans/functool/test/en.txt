@@ -1,0 +1,3 @@
+hello, world!
+you are a good man~
+how about golang language?

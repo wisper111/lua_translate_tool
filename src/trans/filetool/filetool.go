@@ -97,10 +97,15 @@ func (ft *filetool) GetFilesMap(path, filter string) (map[string]string, error) 
 }
 
 func (ft *filetool) ReadAll(name string) ([]byte, error) {
-	f, err := os.Open(name)
-	defer f.Close()
-	if err != nil {
-		return []byte{}, err
+	return ioutil.ReadFile(name)
+}
+
+func (ft *filetool) WriteAll(name string, text []byte) error {
+	if index := strings.LastIndex(name, "/"); index != -1 {
+		err := os.MkdirAll(name[:index], 0777)
+		if err != nil {
+			return err
+		}
 	}
-	return ioutil.ReadAll(f)
+	return ioutil.WriteFile(name, text, 0666)
 }

@@ -6,7 +6,7 @@ import (
 	"trans/filetool"
 )
 
-func Test_example1(t *testing.T) {
+func Test_ReadFileLine(t *testing.T) {
 	ft := filetool.GetInstance()
 	context, err := ft.ReadFileLine("test.txt")
 	if err != nil {
@@ -16,10 +16,9 @@ func Test_example1(t *testing.T) {
 	for k, v := range context {
 		fmt.Printf("%d %s\n", k, v)
 	}
-	ft.SaveFileLine("test.txt", context)
 }
 
-func Test_example2(t *testing.T) {
+func Test_SaveFileLine(t *testing.T) {
 	ft := filetool.GetInstance()
 	context1, err := ft.ReadFileLine("test1.txt")
 	if err != nil {
@@ -29,10 +28,13 @@ func Test_example2(t *testing.T) {
 	for k, v := range context1 {
 		fmt.Printf("%d %s\n", k, v)
 	}
-	ft.SaveFileLine("test1.txt", context1)
+	err = ft.SaveFileLine("test1.txt", context1)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
-func Test_example3(t *testing.T) {
+func Test_GetInstance(t *testing.T) {
 	ft1 := filetool.GetInstance()
 	ft2 := filetool.GetInstance()
 	if ft1 != ft2 {
@@ -40,7 +42,7 @@ func Test_example3(t *testing.T) {
 	}
 }
 
-func Test_example4(t *testing.T) {
+func Test_ReadAll(t *testing.T) {
 	ft := filetool.GetInstance()
 	bv, err := ft.ReadAll("test.txt")
 	if err != nil {
@@ -49,7 +51,7 @@ func Test_example4(t *testing.T) {
 	fmt.Printf("%s\n", bv)
 }
 
-func Test_example5(t *testing.T) {
+func Test_GetFileMap(t *testing.T) {
 	ft := filetool.GetInstance()
 	fm, err := ft.GetFilesMap("../", "go")
 	if err != nil {
@@ -60,7 +62,24 @@ func Test_example5(t *testing.T) {
 	}
 }
 
-func Benchmark_example(b *testing.B) {
+func Test_WriteAll(t *testing.T) {
+	ft := filetool.GetInstance()
+	bv, err := ft.ReadAll("test.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = ft.WriteAll("test/test/test.txt", bv)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("%s\n", bv)
+	err = ft.WriteAll("test2.txt", bv)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func Benchmark_SaveFileLine(b *testing.B) {
 	ft := filetool.GetInstance()
 	for i := 0; i < b.N; i++ {
 		context, err := ft.ReadFileLine("test.txt")
