@@ -102,10 +102,10 @@ func (ft *filetool) ReadAll(name string) ([]byte, error) {
 
 func (ft *filetool) WriteAll(name string, text []byte) error {
 	if index := strings.LastIndex(name, "/"); index != -1 {
-		err := os.MkdirAll(name[:index], 0777)
+		err := os.MkdirAll(name[:index], os.ModePerm)
 		if err != nil {
 			return err
 		}
 	}
-	return ioutil.WriteFile(name, text, 0666)
+	return ioutil.WriteFile(name, text, os.ModePerm)
 }

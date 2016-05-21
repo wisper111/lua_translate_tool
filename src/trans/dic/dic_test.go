@@ -7,7 +7,7 @@ import (
 )
 
 func Test_Insert(t *testing.T) {
-	db := dic.New("dictionary.db")
+	db := dic.GetInstance("dictionary.db")
 	defer db.Close()
 	if err := db.Insert([]byte("测试"), []byte("ceshi")); err != nil {
 		t.Error(err)
@@ -15,7 +15,7 @@ func Test_Insert(t *testing.T) {
 }
 
 func Test_Query(t *testing.T) {
-	db := dic.New("dictionary.db")
+	db := dic.GetInstance("dictionary.db")
 	defer db.Close()
 	ret, err := db.Query([]byte("测试"))
 	if err != nil {
@@ -30,7 +30,7 @@ func Test_Query(t *testing.T) {
 }
 
 func Benchmark_Insert(b *testing.B) {
-	db := dic.New("dictionary.db")
+	db := dic.GetInstance("dictionary.db")
 	defer db.Close()
 	var cn, trans string
 	for i := 0; i < b.N; i++ {
@@ -43,7 +43,7 @@ func Benchmark_Insert(b *testing.B) {
 }
 
 func Benchmark_Query(b *testing.B) {
-	db := dic.New("dictionary.db")
+	db := dic.GetInstance("dictionary.db")
 	defer db.Close()
 	var cn string
 	for i := 0; i < b.N; i++ {

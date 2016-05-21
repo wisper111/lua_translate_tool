@@ -13,12 +13,13 @@ func Test_GetString(t *testing.T) {
 
 func Test_Update(t *testing.T) {
 	functool.Update("test/cn.txt", "test/en.txt")
-	db := dic.New("dictionary.db")
+	db := dic.GetInstance("dictionary.db")
 	ret, err := db.Query([]byte("你好，世界！"))
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Printf("%s\n", ret)
+	functool.Update("test/cn.txt", "test/test.lua")
 }
 
 func Test_Translate(t *testing.T) {

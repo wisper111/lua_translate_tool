@@ -17,8 +17,8 @@ func Test_example(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for k, v := range ana.ChEntry {
-		fmt.Printf("%d %s\n", k, v)
+	for _, v := range ana.ChEntry {
+		fmt.Printf("%s\n", v)
 	}
 }
 
