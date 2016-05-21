@@ -1,4 +1,4 @@
-lua_translate_tool
+#lua_translate_tool
 
 Description
 -----------
