@@ -26,6 +26,7 @@ func GetInstance(name string) *dic {
 
 func (d *dic) InitDic(name string) {
 	if d.count > 0 {
+		d.count++
 		return
 	}
 	db, err := sql.Open("sqlite3", name)
