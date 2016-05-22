@@ -55,35 +55,29 @@ func (ft *filetool) ReadFileLine(name string) ([][]byte, error) {
 }
 
 func (ft *filetool) SaveFileLine(name string, context [][]byte) error {
-	length := len(context)
-	if length < 1 {
-		return errors.New("context is empty!")
-	}
 	f, err := os.Create(name)
 	defer f.Close()
 	if err != nil {
 		return err
 	}
 	w := bufio.NewWriter(f)
-	if length > 2 {
-		for _, v := range context[:length-1] {
+	length := len(context)
+	if length < 1 {
+		return w.Flush()
+	} else {
+		for _, v := range context[:length] {
 			fmt.Fprintln(w, string(v))
 		}
+		return w.Flush()
 	}
-	fmt.Fprint(w, string(context[length-1]))
-	return w.Flush()
 }
 
-func (ft *filetool) GetFilesMap(path, filter string) (map[string]string, error) {
+func (ft *filetool) GetFilesMap(path string) (map[string]string, error) {
 	filemap := make(map[string]string)
 	f := func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
 			path = strings.Replace(path, "\\", "/", -1)
-			pathv := strings.Split(path, "/")
-			exn := strings.Split(pathv[len(pathv)-1], ".")
-			if strings.EqualFold(filter, exn[len(exn)-1]) {
-				filemap[path] = path
-			}
+			filemap[path] = path
 			return err
 		} else {
 			return nil

@@ -53,7 +53,7 @@ func Test_ReadAll(t *testing.T) {
 
 func Test_GetFileMap(t *testing.T) {
 	ft := filetool.GetInstance()
-	fm, err := ft.GetFilesMap("../", "go")
+	fm, err := ft.GetFilesMap("../")
 	if err != nil {
 		t.Fatal(err)
 	}
