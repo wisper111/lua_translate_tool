@@ -18,14 +18,12 @@ Usage:	trans command [arguments]
 
 The commands are:
 
-	getstring    extract chinese from file or folder.
-				 e.g. trans getstring path
-				
-	update       update translation to dictionary.
-				 e.g. trans update chinese.txt viet.txt
-				
-	translate    translate lua script.
-				 e.g. trans translate src_path des_path
+	getstring	extract chinese from file or folder.
+				e.g. trans getstring path				
+	update		update translation to dictionary.
+				e.g. trans update chinese.txt viet.txt				
+	translate	translate lua script.
+				e.g. trans translate src_path des_path
 	
 Remark: Only support UFT-8 encoding`)
 }
@@ -33,11 +31,14 @@ Remark: Only support UFT-8 encoding`)
 func main() {
 	//	defer profile.Start(profile.CPUProfile).Stop()
 	//	defer profile.Start(profile.MemProfile).Stop()
+	defer functool.WriteLog()
 	switch len(os.Args) {
 	case 3:
 		if strings.EqualFold(os.Args[1], "getstring") {
 			if err := functool.GetString(os.Args[2]); err != nil {
 				log.Println(err)
+			} else {
+				log.Printf("getstring finished!")
 			}
 		} else {
 			useage()
@@ -46,10 +47,14 @@ func main() {
 		if strings.EqualFold(os.Args[1], "update") {
 			if err := functool.Update(os.Args[2], os.Args[3]); err != nil {
 				log.Println(err)
+			} else {
+				log.Printf("update finished!")
 			}
 		} else if strings.EqualFold(os.Args[1], "translate") {
 			if err := functool.Translate(os.Args[2], os.Args[3]); err != nil {
 				log.Println(err)
+			} else {
+				log.Println("translate finished!")
 			}
 		} else {
 			useage()

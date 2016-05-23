@@ -57,8 +57,8 @@ func Test_GetFileMap(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, v := range fm {
-		fmt.Println(v)
+	for i := 0; i < len(fm); i++ {
+		fmt.Println(i, fm[i])
 	}
 }
 

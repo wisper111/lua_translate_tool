@@ -72,12 +72,14 @@ func (ft *filetool) SaveFileLine(name string, context [][]byte) error {
 	}
 }
 
-func (ft *filetool) GetFilesMap(path string) (map[string]string, error) {
-	filemap := make(map[string]string)
+func (ft *filetool) GetFilesMap(path string) (map[int]string, error) {
+	index := 0
+	filemap := make(map[int]string)
 	f := func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
 			path = strings.Replace(path, "\\", "/", -1)
-			filemap[path] = path
+			filemap[index] = path
+			index++
 			return err
 		} else {
 			return nil

@@ -56,7 +56,7 @@ func (a *analysis) Analysis(text *[]byte) error {
 	nSize := len(*text)
 	for i := 0; i < nSize; i++ {
 		if i+1 < nSize && (*text)[i] == sl &&
-			((*text)[i+1] == ap || (*text)[i+1] == dq) {
+			((*text)[i+1] == ap || (*text)[i+1] == dq || (*text)[i+1] == sl) {
 			i++
 			continue
 		}
@@ -86,28 +86,16 @@ func (a *analysis) Analysis(text *[]byte) error {
 					}
 				}
 			case ap:
-				if i+1 < nSize && (*text)[i+1] == ap {
-					i += 1
-				} else {
-					nStateStart = i + 1
-					nState = state_apostrophe
-				}
+				nStateStart = i + 1
+				nState = state_apostrophe
 			case dq:
-				if i+1 < nSize && (*text)[i+1] == dq {
-					i += 1
-				} else {
-					nStateStart = i + 1
-					nState = state_double_quotes
-				}
+				nStateStart = i + 1
+				nState = state_double_quotes
 			case bl:
 				if i+1 < nSize && (*text)[i+1] == bl {
-					if i+3 < nSize && (*text)[i+2] == br && (*text)[i+3] == br {
-						i += 3
-					} else {
-						nStateStart = i + 2
-						nState = state_double_brackets
-						i += 1
-					}
+					nStateStart = i + 2
+					nState = state_double_brackets
+					i += 1
 				}
 			}
 		case state_note_line:
