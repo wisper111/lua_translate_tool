@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 	"trans/functool"
@@ -31,31 +30,18 @@ Remark: Only support UFT-8 encoding`)
 func main() {
 	//	defer profile.Start(profile.CPUProfile).Stop()
 	//	defer profile.Start(profile.MemProfile).Stop()
-	defer functool.WriteLog()
 	switch len(os.Args) {
 	case 3:
 		if strings.EqualFold(os.Args[1], "getstring") {
-			if err := functool.GetString(os.Args[2]); err != nil {
-				log.Println(err)
-			} else {
-				log.Printf("getstring finished!")
-			}
+			functool.GetString(os.Args[2])
 		} else {
 			useage()
 		}
 	case 4:
 		if strings.EqualFold(os.Args[1], "update") {
-			if err := functool.Update(os.Args[2], os.Args[3]); err != nil {
-				log.Println(err)
-			} else {
-				log.Printf("update finished!")
-			}
+			functool.Update(os.Args[2], os.Args[3])
 		} else if strings.EqualFold(os.Args[1], "translate") {
-			if err := functool.Translate(os.Args[2], os.Args[3]); err != nil {
-				log.Println(err)
-			} else {
-				log.Println("translate finished!")
-			}
+			functool.Translate(os.Args[2], os.Args[3])
 		} else {
 			useage()
 		}

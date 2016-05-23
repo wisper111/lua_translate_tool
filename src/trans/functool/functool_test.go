@@ -9,6 +9,7 @@ import (
 
 func Test_GetString(t *testing.T) {
 	functool.GetString("test")
+	functool.GetString("f:/bqp/bqp/client1")
 }
 
 func Test_Update(t *testing.T) {
