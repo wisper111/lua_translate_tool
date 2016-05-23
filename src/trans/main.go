@@ -19,11 +19,11 @@ Usage:	trans command [arguments]
 The commands are:
 
 	getstring	extract chinese from file or folder.
-				e.g. trans getstring path				
+			e.g. trans getstring path				
 	update		update translation to dictionary.
-				e.g. trans update chinese.txt viet.txt				
+			e.g. trans update chinese.txt viet.txt				
 	translate	translate lua script.
-				e.g. trans translate src_path des_path
+			e.g. trans translate src_path des_path
 	
 Remark: Only support UFT-8 encoding`)
 }
