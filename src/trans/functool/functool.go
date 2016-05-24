@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	//	"sync"
 	"trans/analysis"
 	"trans/dic"
 	"trans/filetool"
@@ -113,7 +114,7 @@ func GetString(filedir string) {
 			writeLog(log_file|log_print, err)
 		}
 	}
-	db := dic.GetInstance(const_dic_file)
+	db := dic.New(const_dic_file)
 	defer db.Close()
 	var ret [][]byte
 	for i := 0; i < len(anal.ChEntry); i++ {
@@ -152,7 +153,7 @@ func Update(cnFile, transFile string) {
 			cnFile, linecount1, transFile, linecount2))
 		return
 	}
-	db := dic.GetInstance(const_dic_file)
+	db := dic.New(const_dic_file)
 	defer db.Close()
 	var count int = 0
 	for i := 0; i < linecount1; i++ {
@@ -182,26 +183,31 @@ func Translate(src, des string) {
 		writeLog(log_file|log_print, err)
 		return
 	}
-	var notrans [][]byte
-	db := dic.GetInstance(const_dic_file)
+	db := dic.New(const_dic_file)
 	defer db.Close()
-	for i := 0; i < len(fmap); i++ {
-		bv, err := ft.ReadAll(fmap[i])
+	var notrans [][]byte
+	//	wg := &sync.WaitGroup{}
+	//	mutex := &sync.Mutex{}
+	f := func(oldfile, newfile string) {
+		//		defer wg.Done()
+		bv, err := ft.ReadAll(oldfile)
 		if err != nil {
 			writeLog(log_file|log_print, err)
-			continue
+			return
 		}
-		if err := filterFile(fmap[i]); err == nil {
+		if err := filterFile(oldfile); err == nil {
 			anal := analysis.New()
 			err = anal.Analysis(&bv)
 			if err != nil {
 				writeLog(log_file|log_print, err)
-				continue
+				return
 			}
 			for _, t := range anal.ChEntry {
 				trans, err := db.Query(t)
 				if err != nil {
+					//					mutex.Lock()
 					notrans = append(notrans, t)
+					//					mutex.Unlock()
 					continue
 				}
 				bv = bytes.Replace(bv, t, trans, -1)
@@ -209,9 +215,14 @@ func Translate(src, des string) {
 		} else {
 			writeLog(log_file, err)
 		}
-		fpath := strings.Replace(fmap[i], src, des, 1)
-		ft.WriteAll(fpath, bv)
+		ft.WriteAll(newfile, bv)
 	}
+	for i := 0; i < len(fmap); i++ {
+		fpath := strings.Replace(fmap[i], src, des, 1)
+		//		wg.Add(1)
+		/*go*/ f(fmap[i], fpath)
+	}
+	//	wg.Wait()
 	if len(notrans) > 0 {
 		if err := ft.SaveFileLine(const_chinese_file, notrans); err != nil {
 			writeLog(log_file|log_print, err)

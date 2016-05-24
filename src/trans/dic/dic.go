@@ -3,50 +3,31 @@ package dic
 import (
 	"database/sql"
 	"log"
-	"sync"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 type dic struct {
-	db    *sql.DB
-	count int
+	db *sql.DB
 }
 
-var instance *dic
-var once sync.Once
-
-func GetInstance(name string) *dic {
-	once.Do(func() {
-		instance = &dic{nil, 0}
-	})
-	instance.InitDic(name)
-	return instance
-}
-
-func (d *dic) InitDic(name string) {
-	if d.count > 0 {
-		d.count++
-		return
-	}
+func New(name string) *dic {
+	ins := &dic{}
 	db, err := sql.Open("sqlite3", name)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	sqlStmt := `
-	create table if not exists dic (cn bold not null primary key, trans bold not null);
-	`
+	sqlStmt := `create table if not exists dic (cn bold not null primary key, trans bold not null);`
 	_, err = db.Exec(sqlStmt)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	d.db = db
-	d.count = 1
+	ins.db = db
+	return ins
 }
 
 func (d *dic) Close() {
-	d.count--
-	if d.count <= 0 {
+	if d.db != nil {
 		if err := d.db.Close(); err != nil {
 			log.Fatalln(err)
 		}

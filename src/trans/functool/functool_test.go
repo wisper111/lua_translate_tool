@@ -14,7 +14,7 @@ func Test_GetString(t *testing.T) {
 
 func Test_Update(t *testing.T) {
 	functool.Update("test/cn.txt", "test/en.txt")
-	db := dic.GetInstance("dictionary.db")
+	db := dic.New("dictionary.db")
 	defer db.Close()
 	ret, err := db.Query([]byte("你好，世界！"))
 	if err != nil {

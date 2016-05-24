@@ -81,8 +81,7 @@ func (ft *filetool) GetFilesMap(path string) (map[int]string, error) {
 	}
 	f := func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
-			path = strings.Replace(path, "\\", "/", -1)
-			filemap[index] = path
+			filemap[index] = strings.Replace(path, "\\", "/", -1)
 			index++
 			return err
 		} else {
