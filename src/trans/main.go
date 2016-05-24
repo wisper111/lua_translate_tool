@@ -24,7 +24,7 @@ The commands are:
 	translate	translate lua script.
 			e.g. trans translate src_path des_path
 	
-Remark: Only support UFT-8 encoding`)
+Remark: Only supports the same encoded files, such as UTF-8`)
 }
 
 func main() {
