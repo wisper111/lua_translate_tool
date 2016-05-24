@@ -91,6 +91,7 @@ func filterFile(name string) error {
 }
 
 func GetString(filedir string) {
+	filedir = strings.Replace(filedir, "\\", "/", -1)
 	ft := filetool.GetInstance()
 	fmap, err := ft.GetFilesMap(filedir)
 	if err != nil {
@@ -131,6 +132,8 @@ func GetString(filedir string) {
 }
 
 func Update(cnFile, transFile string) {
+	cnFile = strings.Replace(cnFile, "\\", "/", -1)
+	transFile = strings.Replace(transFile, "\\", "/", -1)
 	ft := filetool.GetInstance()
 	linetext1, err1 := ft.ReadFileLine(cnFile)
 	if err1 != nil {
@@ -171,6 +174,8 @@ func Update(cnFile, transFile string) {
 }
 
 func Translate(src, des string) {
+	src = strings.Replace(src, "\\", "/", -1)
+	des = strings.Replace(des, "\\", "/", -1)
 	ft := filetool.GetInstance()
 	fmap, err := ft.GetFilesMap(src)
 	if err != nil {
@@ -179,6 +184,7 @@ func Translate(src, des string) {
 	}
 	var notrans [][]byte
 	db := dic.GetInstance(const_dic_file)
+	defer db.Close()
 	for i := 0; i < len(fmap); i++ {
 		bv, err := ft.ReadAll(fmap[i])
 		if err != nil {
@@ -212,7 +218,7 @@ func Translate(src, des string) {
 			return
 		}
 		writeLog(log_file|log_print,
-			fmt.Sprintf("update %s, not translate line number: %d.", const_chinese_file, len(notrans)))
+			fmt.Sprintf("update %s, line number: %d.", const_chinese_file, len(notrans)))
 	}
 	writeLog(log_file|log_print, "translate finished!")
 	return
