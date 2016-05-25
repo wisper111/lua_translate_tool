@@ -7,10 +7,11 @@ import (
 	"log"
 	"os"
 	"strings"
-	//	"sync"
+	"sync"
 	"trans/analysis"
 	"trans/dic"
 	"trans/filetool"
+	"trans/gpool"
 )
 
 const (
@@ -174,7 +175,7 @@ func Update(cnFile, transFile string) {
 	return
 }
 
-func Translate(src, des string) {
+func Translate(src, des string, queue int) {
 	src = strings.Replace(src, "\\", "/", -1)
 	des = strings.Replace(des, "\\", "/", -1)
 	ft := filetool.GetInstance()
@@ -183,13 +184,14 @@ func Translate(src, des string) {
 		writeLog(log_file|log_print, err)
 		return
 	}
+	writeLog(log_file|log_print, fmt.Sprintf("translate files total: %d", len(fmap)))
 	db := dic.New(const_dic_file)
 	defer db.Close()
 	var notrans [][]byte
-	//	wg := &sync.WaitGroup{}
-	//	mutex := &sync.Mutex{}
+	pool := gpool.New(queue)
+	mutex := &sync.Mutex{}
 	f := func(oldfile, newfile string) {
-		//		defer wg.Done()
+		defer pool.Done()
 		bv, err := ft.ReadAll(oldfile)
 		if err != nil {
 			writeLog(log_file|log_print, err)
@@ -205,9 +207,9 @@ func Translate(src, des string) {
 			for _, t := range anal.ChEntry {
 				trans, err := db.Query(t)
 				if err != nil {
-					//					mutex.Lock()
+					mutex.Lock()
 					notrans = append(notrans, t)
-					//					mutex.Unlock()
+					mutex.Unlock()
 					continue
 				}
 				bv = bytes.Replace(bv, t, trans, -1)
@@ -219,10 +221,10 @@ func Translate(src, des string) {
 	}
 	for i := 0; i < len(fmap); i++ {
 		fpath := strings.Replace(fmap[i], src, des, 1)
-		//		wg.Add(1)
-		/*go*/ f(fmap[i], fpath)
+		pool.Add(1)
+		go f(fmap[i], fpath)
 	}
-	//	wg.Wait()
+	pool.Wait()
 	if len(notrans) > 0 {
 		if err := ft.SaveFileLine(const_chinese_file, notrans); err != nil {
 			writeLog(log_file|log_print, err)

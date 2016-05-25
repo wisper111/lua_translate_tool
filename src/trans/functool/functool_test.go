@@ -25,7 +25,7 @@ func Test_Update(t *testing.T) {
 }
 
 func Test_Translate(t *testing.T) {
-	functool.Translate("test/cn", "test/en")
+	functool.Translate("f:\\bqp\\bqp", "f:\\bqp\\bqp1")
 }
 
 func Benchmark_GetString(b *testing.B) {

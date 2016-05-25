@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"trans/functool"
 
-	//	"github.com/profile"
+	"github.com/profile"
 )
 
 func useage() {
@@ -28,7 +29,7 @@ Remark: Only supports the same encoded files, such as UTF-8`)
 }
 
 func main() {
-	//	defer profile.Start(profile.CPUProfile).Stop()
+	defer profile.Start(profile.CPUProfile).Stop()
 	//	defer profile.Start(profile.MemProfile).Stop()
 	switch len(os.Args) {
 	case 3:
@@ -41,7 +42,14 @@ func main() {
 		if strings.EqualFold(os.Args[1], "update") {
 			functool.Update(os.Args[2], os.Args[3])
 		} else if strings.EqualFold(os.Args[1], "translate") {
-			functool.Translate(os.Args[2], os.Args[3])
+			functool.Translate(os.Args[2], os.Args[3], 1)
+		} else {
+			useage()
+		}
+	case 5:
+		if strings.EqualFold(os.Args[1], "translate") {
+			queue, _ := strconv.ParseInt(os.Args[4], 10, 0)
+			functool.Translate(os.Args[2], os.Args[3], int(queue))
 		} else {
 			useage()
 		}
