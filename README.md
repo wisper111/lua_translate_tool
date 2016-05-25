@@ -8,7 +8,7 @@ lua script translate tool
 Documentation
 -------------
 
-Build after install third party library
+Build after install MinGW and third party library
  
     go get github.com/mattn/go-sqlite3
     
@@ -16,15 +16,15 @@ How to use:
 
 Extract chinese character string
  
-    ./trans getstring file or folder
+    ./trans getstring path
 	
 Use artificial translated documents(trans.txt), update to dictionary
  
     ./trans update chinese.txt trans.txt
 	
-Translate all file or folder
+Translate all file or folder(num is goroutine amount, default is 1)
  
-    ./trans translate srcPath desPath
+    ./trans translate srcdir desdir [num]
 
 License
 -------------
